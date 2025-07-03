@@ -7,6 +7,10 @@ There's also launchIntelOS.bat, so run that and you will see if you have Vulkan.
 This is also compatible with NVIDIA, but I have some examples of what it does to Mirror's Edge, so go into the folder "EX" to see the screenshots I took.
 I like the realistic lighting :)
 
+By the way, Windows users who have NVIDIA or Intel, PLEASE use your control menu and Intel, use Graphics Center, and use RSTA, or Rapid Storage Technology Application, to check if any C/C++ errors are malfunctioning on your computer. 
+If there is, please file an issue report, and I'll fix it.
+
+Pictures of games that have been affected in a good way:
 
 ![Example_3](https://github.com/user-attachments/assets/3e329782-82a6-4810-b4e9-9c4e5d439e5f)
 cool photo or something, oh yeah there's more
@@ -19,33 +23,33 @@ SPECS:
  
 specs that are fine to use:
 -t
-      OS Name    : Windows 11
+      OS Name   : Windows 11
 -t
-      OS Arch    : amd64
+      OS Arch   : amd64
 -t      
       Java Ver   : 23.0.1
 -t      
-      CPU Cores  : 8
+      CPU Cores : 8
 
-specs that need the latest version of Direct X 12:
+specs that need the latest version of DirectX 12:
 -t
-      OS Name    : Windows XP
+      OS Name   : Windows XP
 -t      
-      OS Arch    : couldn't find arch
+      OS Arch   : couldn't find arch
 -t      
-      Java Ver   : 1.8
+      Java Ver  : 1.8
 -t    
       CPU Cores  : 3
 
 Alright, fine. We know you are a gamer.
 -t
-      OS Name    : Windows 11
+      OS Name   : Windows 11
 -t     
-      OS Arch    : amd64
+      OS Arch   : amd64
 -t      
       Java Ver   : 23.0.1
 -t      
-      CPU Cores  : 16
+      CPU Cores : 16
 -t      
       Has Vulkan and OpenGL
       
