@@ -4,3 +4,6 @@ theres also launchIntelOS.bat so run that and you will see if you have Vulkan. s
 
 this is also compatible with NVIDIA but i have some examples of what it does to Mirror's Edge, so go into the folder "EX" to see the screenshots i took.
 i like the realistic lighting :)
+
+
+![Example_3](https://github.com/user-attachments/assets/3e329782-82a6-4810-b4e9-9c4e5d439e5f)
