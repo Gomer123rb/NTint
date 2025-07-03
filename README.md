@@ -18,20 +18,35 @@ MAC USERS, WE ARE WORKING ON IT!
 SPECS:
  
 specs that are fine to use:
+-t
       OS Name    : Windows 11
+-t
       OS Arch    : amd64
+-t      
       Java Ver   : 23.0.1
+-t      
       CPU Cores  : 8
 
 specs that need the latest version of Direct X 12:
+-t
       OS Name    : Windows XP
+-t      
       OS Arch    : couldn't find arch
+-t      
       Java Ver   : 1.8
+-t    
       CPU Cores  : 3
 
 Alright, fine. We know you are a gamer.
+-t
       OS Name    : Windows 11
+-t     
       OS Arch    : amd64
+-t      
       Java Ver   : 23.0.1
+-t      
       CPU Cores  : 16
+-t      
       Has Vulkan and OpenGL
+      
+-n
