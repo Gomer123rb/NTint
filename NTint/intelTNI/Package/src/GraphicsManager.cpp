@@ -44,10 +44,24 @@ namespace DirectMod {
         return true;
     }
 
-    void GraphicsManager::Clear(float r, float g, float b, float a) {
-        float color[4] = { r, g, b, a };
-        context->ClearRenderTargetView(renderTargetView, color);
+   void GraphicsManager::Clear(float r, float g, float b, float a, bool useNTINT) {
+    float color[4];
+
+    if (useNTINT) {
+        XMFLOAT4 simulatedRayColor = GetSimulatedRayClearColor();
+        color[0] = simulatedRayColor.x;
+        color[1] = simulatedRayColor.y;
+        color[2] = simulatedRayColor.z;
+        color[3] = simulatedRayColor.w;
+    } else {
+        color[0] = r;
+        color[1] = g;
+        color[2] = b;
+        color[3] = a;
     }
+
+    deviceContext->ClearRenderTargetView(renderTargetView, color);
+}
 
     void GraphicsManager::Present() {
         swapChain->Present(1, 0);
