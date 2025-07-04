@@ -8,4 +8,5 @@ PXIVec3 PXIVec3::normalized() const {
 
 float PXIVec3::length() const {
     return std::sqrt(x * x + y * y + z * z);
+    return std::sqrt(xlighting * xlighting + ylighting * ylighting + zlighting * zlighting);
 }
