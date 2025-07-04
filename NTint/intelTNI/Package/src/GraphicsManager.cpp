@@ -1,4 +1,5 @@
 #include "../include/GraphicsManager.h"
+#include <DirectXMath.h>
 
 namespace DirectMod {
     ID3D11Device* GraphicsManager::device = nullptr;
@@ -27,7 +28,7 @@ namespace DirectMod {
             &swapChain,
             &device,
             nullptr,
-            &context)))
+            &context))) 
         {
             return false;
         }
@@ -44,24 +45,29 @@ namespace DirectMod {
         return true;
     }
 
-   void GraphicsManager::Clear(float r, float g, float b, float a, bool useNTINT) {
-    float color[4];
-
-    if (useNTINT) {
-        XMFLOAT4 simulatedRayColor = GetSimulatedRayClearColor();
-        color[0] = simulatedRayColor.x;
-        color[1] = simulatedRayColor.y;
-        color[2] = simulatedRayColor.z;
-        color[3] = simulatedRayColor.w;
-    } else {
-        color[0] = r;
-        color[1] = g;
-        color[2] = b;
-        color[3] = a;
+    DirectX::XMFLOAT4 GraphicsManager::GetSimulatedRayClearColor() {
+        // Placeholder simulated ray-traced ambient tone
+        return DirectX::XMFLOAT4(0.13f, 0.16f, 0.20f, 1.0f);
     }
 
-    deviceContext->ClearRenderTargetView(renderTargetView, color);
-}
+    void GraphicsManager::Clear(float r, float g, float b, float a, bool useNTINT) {
+        float color[4];
+
+        if (useNTINT) {
+            DirectX::XMFLOAT4 simulatedRayColor = GetSimulatedRayClearColor();
+            color[0] = simulatedRayColor.x;
+            color[1] = simulatedRayColor.y;
+            color[2] = simulatedRayColor.z;
+            color[3] = simulatedRayColor.w;
+        } else {
+            color[0] = r;
+            color[1] = g;
+            color[2] = b;
+            color[3] = a;
+        }
+
+        context->ClearRenderTargetView(renderTargetView, color);
+    }
 
     void GraphicsManager::Present() {
         swapChain->Present(1, 0);
