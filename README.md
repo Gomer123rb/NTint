@@ -1,3 +1,6 @@
+News:
+7/5/25: I won't be able to make a update cause i'll be buying a new computer, but i will be making a few new updates for now... <:-(
+
 How to use:
 
 First, go to the folder "NTint", then "intelTNI" to understand how to use this, then come back when you are done. Assuming you are (now), to use intelPXI, go to the folder intelPXI and drag the "he_2" folder to your documents. Then open MounterApplication.exe, and you are done. For the best experience, please have an Intel Iris Xe Graphics Card. Or you can do whatever, I guess
