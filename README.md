@@ -16,6 +16,8 @@ lwjgl.jar
 
 Then run the launchIntelOS.bat file and boom, you know you have whatever you need.
 
+Also I think you can mount this on a jail-breaked Playstaion 3 or later, and if you mounted it, please also make a tutorial too so others can do it too!
+
 This is also compatible with NVIDIA, but I have some examples of what it does to Mirror's Edge, so go into the folder "EX" to see the screenshots I took.
 I like the realistic lighting :)
 
