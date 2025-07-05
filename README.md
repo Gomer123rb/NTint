@@ -3,6 +3,18 @@ How to use:
 First, go to the folder "NTint", then "intelTNI" to understand how to use this, then come back when you are done. Assuming you are (now), to use intelPXI, go to the folder intelPXI and drag the "he_2" folder to your documents. Then open MounterApplication.exe, and you are done. For the best experience, please have an Intel Iris Xe Graphics Card. Or you can do whatever, I guess
 
 There's also launchIntelOS.bat, so run that and you will see if you have Vulkan. So, if you do, you prob got OpenGL too.
+By the way, you have to make a folder called "lib" and download these files:
+
+gluegen-rt-natives-windows-amd64.jar
+gluegen-rt.jar
+jogl-all-natives-windows-amd64.jar
+jogl-all.jar
+lwjgl-glfw.jar
+lwjgl-stb.jar
+lwjgl-vulkan.jar
+lwjgl.jar
+
+Then run the launchIntelOS.bat file and boom, you know you have whatever you need.
 
 This is also compatible with NVIDIA, but I have some examples of what it does to Mirror's Edge, so go into the folder "EX" to see the screenshots I took.
 I like the realistic lighting :)
