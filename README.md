@@ -1,4 +1,5 @@
-News:
+News: 
+
 7/5/25: I won't be able to make a update cause i'll be buying a new computer, but i will be making a few new updates for now... <:-(
 
 How to use:
