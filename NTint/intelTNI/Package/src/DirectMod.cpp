@@ -25,6 +25,7 @@ namespace DirectMod {
 
     void Shutdown() {
         GraphicsManager::Shutdown();
-        // Additional shutdown for other systems if necessary.
+        WindowManager::Shutdown();
+        InputManager::Shutdown();
     }
 }
