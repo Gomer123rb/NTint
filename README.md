@@ -1,6 +1,7 @@
 News: 
 
 7/5/25: I won't be able to make a update cause i'll be buying a new computer, but i will be making a few new updates for now... <:-(
+7/12/25: I got the new commputer! ill be making updates! MY STEAM ACCOUNT got perm banned cause sum dude used it to scam people. ill have to use roblox.
 
 How to use:
 
