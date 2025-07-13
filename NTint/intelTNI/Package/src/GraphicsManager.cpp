@@ -9,12 +9,17 @@ namespace DirectMod {
 
     bool GraphicsManager::Initialize(HWND hwnd) {
         DXGI_SWAP_CHAIN_DESC scd = {};
-        scd.BufferCount = 1;
+        scd.BufferCount = 2;  // Double buffering for smoother frames
         scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+        scd.BufferDesc.RefreshRate.Numerator = 60;
+        scd.BufferDesc.RefreshRate.Denominator = 1;
         scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         scd.OutputWindow = hwnd;
         scd.SampleDesc.Count = 1;
+        scd.SampleDesc.Quality = 0;
         scd.Windowed = TRUE;
+        scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+        scd.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
         if (FAILED(D3D11CreateDeviceAndSwapChain(
             nullptr,
@@ -28,25 +33,37 @@ namespace DirectMod {
             &swapChain,
             &device,
             nullptr,
-            &context))) 
+            &context)))
         {
             return false;
         }
 
         ID3D11Texture2D* backBuffer = nullptr;
-        swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
+        if (FAILED(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer))) {
+            return false;
+        }
+
         if (FAILED(device->CreateRenderTargetView(backBuffer, nullptr, &renderTargetView))) {
             backBuffer->Release();
             return false;
         }
         backBuffer->Release();
-
         context->OMSetRenderTargets(1, &renderTargetView, nullptr);
+
+        // Set up viewport based on buffer size
+        D3D11_VIEWPORT viewport = {};
+        viewport.TopLeftX = 0;
+        viewport.TopLeftY = 0;
+        viewport.Width = static_cast<float>(scd.BufferDesc.Width ? scd.BufferDesc.Width : 800);
+        viewport.Height = static_cast<float>(scd.BufferDesc.Height ? scd.BufferDesc.Height : 600);
+        viewport.MinDepth = 0.0f;
+        viewport.MaxDepth = 1.0f;
+        context->RSSetViewports(1, &viewport);
+
         return true;
     }
 
     DirectX::XMFLOAT4 GraphicsManager::GetSimulatedRayClearColor() {
-        // Placeholder simulated ray-traced ambient tone
         return DirectX::XMFLOAT4(0.13f, 0.16f, 0.20f, 1.0f);
     }
 
@@ -70,7 +87,7 @@ namespace DirectMod {
     }
 
     void GraphicsManager::Present() {
-        swapChain->Present(1, 0);
+        swapChain->Present(0, 0);  // Immediate frame display, minimal lag
     }
 
     void GraphicsManager::Shutdown() {
