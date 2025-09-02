@@ -4,6 +4,8 @@ News:
 
 7/12/25: I got the new commputer! ill be making updates! MY STEAM ACCOUNT got perm banned cause some dude hacked it and used it to scam people. ill have to use roblox.
 
+9/2/25: WOW i made a new steam account and bought all my games back, and found my 2FA recovery codes. yay!
+
 How to use:
 
 First, go to the folder "NTint", then "intelTNI" to understand how to use this, then come back when you are done. Assuming you are (now), to use intelPXI, go to the folder intelPXI and drag the "he_2" folder to your documents. Then open MounterApplication.exe, and you are done. For the best experience, please have an Intel Iris Xe Graphics Card. Or you can do whatever, I guess
