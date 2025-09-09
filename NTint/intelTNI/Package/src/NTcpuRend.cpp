@@ -27,7 +27,7 @@ namespace DirectMod {
         DXGI_SWAP_CHAIN_DESC scd = {};
         scd.BufferCount = 2;
         scd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        scd.BufferDesc.RefreshRate.Numerator = 60;
+        scd.BufferDesc.RefreshRate.Numerator = 240;
         scd.BufferDesc.RefreshRate.Denominator = 1;
         scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
         scd.OutputWindow = hwnd;
@@ -116,4 +116,5 @@ namespace DirectMod {
         if (device) { device->Release(); device = nullptr; }
         return false;
     }
+
 }
