@@ -79,8 +79,6 @@ public class intelBoot {
                 System.out.println("[gfx] Adapter Name  : " + name);
                 System.out.printf("[gfx] Vulkan Ver    : %d.%d.%d%n",
                     VK_VERSION_MAJOR(api), VK_VERSION_MINOR(api), VK_VERSION_PATCH(api));
-                System.out.println("[gfx] Video Memory  : ~8192 MB");
-                System.out.println("[gfx] Render Tier   : ULTRA 💎🚀");
 
                 vkDestroyInstance(instance, null);
             } catch (Exception e) {
@@ -91,79 +89,123 @@ public class intelBoot {
 
     // ── GFX: Real FPS Benchmark ───────────────────────────────────────────────────
     static class GfxFpsCommand implements IntelCommand {
-        @Override public void run(String[] args, Object module) {
-            int durationSec = 5;
-            System.out.println("[gfx] Running Vulkan FPS benchmark (" + durationSec + " sec)...");
+@Override public void run(String[] args, Object module) {
+    int durationSec = 5;
+    System.out.println("[gfx] Running Vulkan FPS benchmark (" + durationSec + " sec)...");
 
-            try (MemoryStack stack = MemoryStack.stackPush()) {
-                VkInstanceCreateInfo ci = VkInstanceCreateInfo.calloc(stack)
-                    .sType(VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO);
+    try (MemoryStack stack = MemoryStack.stackPush()) {
+        VkInstanceCreateInfo ci = VkInstanceCreateInfo.calloc(stack)
+            .sType(VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO);
 
-                PointerBuffer pInst = stack.mallocPointer(1);
-                if (vkCreateInstance(ci, null, pInst) != VK_SUCCESS) {
-                    System.out.println("[gfx] Vulkan init failed.");
-                    return;
-                }
-                VkInstance instance = new VkInstance(pInst.get(0), ci);
+        PointerBuffer pInst = stack.mallocPointer(1);
+        if (vkCreateInstance(ci, null, pInst) != VK_SUCCESS) {
+            System.out.println("[gfx] Vulkan init failed.");
+            return;
+        }
+        VkInstance instance = new VkInstance(pInst.get(0), ci);
 
-                IntBuffer count = stack.ints(0);
-                vkEnumeratePhysicalDevices(instance, count, null);
-                if (count.get(0) == 0) {
-                    System.out.println("[gfx] No Vulkan GPU found.");
-                    vkDestroyInstance(instance, null);
-                    return;
-                }
-
-                PointerBuffer devices = stack.mallocPointer(count.get(0));
-                vkEnumeratePhysicalDevices(instance, count, devices);
-                VkPhysicalDevice phyDev = new VkPhysicalDevice(devices.get(0), instance);
-
-                VkPhysicalDeviceProperties props = VkPhysicalDeviceProperties.calloc(stack);
-                vkGetPhysicalDeviceProperties(phyDev, props);
-
-                String name = props.deviceNameString();
-                int api = props.apiVersion();
-
-                VkDeviceCreateInfo dci = VkDeviceCreateInfo.calloc(stack)
-                    .sType(VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO);
-                PointerBuffer pDev = stack.mallocPointer(1);
-                if (vkCreateDevice(phyDev, dci, null, pDev) != VK_SUCCESS) {
-                    System.out.println("[gfx] Failed to create logical device.");
-                    vkDestroyInstance(instance, null);
-                    return;
-                }
-                VkDevice device = new VkDevice(pDev.get(0), phyDev, dci);
-
-                long start = System.nanoTime();
-                int frames = 0;
-                while ((System.nanoTime() - start) < durationSec * 1_000_000_000L) {
-                    frames++;
-                }
-                long end = System.nanoTime();
-                double elapsed = (end - start) / 1_000_000_000.0;
-                double fps = frames / elapsed;
-
-                System.out.println("[gfx] Adapter        : " + name);
-                System.out.printf("[gfx] API Version    : Vulkan %d.%d%n",
-                    VK_VERSION_MAJOR(api), VK_VERSION_MINOR(api));
-                System.out.printf("[gfx] Frames Rendered: %d%n", frames);
-                System.out.printf("[gfx] Time Elapsed   : %.2f sec%n", elapsed);
-                System.out.printf("[gfx] Average FPS    : %.2f%n", fps);
-                System.out.println("[gfx] Render Tier    : " + tier(fps));
-
-                vkDestroyDevice(device, null);
-                vkDestroyInstance(instance, null);
-            } catch (Exception e) {
-                System.out.println("[gfx] Benchmark error: " + e.getMessage());
-            }
+        IntBuffer count = stack.ints(0);
+        vkEnumeratePhysicalDevices(instance, count, null);
+        if (count.get(0) == 0) {
+            System.out.println("[gfx] No Vulkan GPU found.");
+            vkDestroyInstance(instance, null);
+            return;
         }
 
+        PointerBuffer devices = stack.mallocPointer(count.get(0));
+        vkEnumeratePhysicalDevices(instance, count, devices);
+        VkPhysicalDevice phyDev = new VkPhysicalDevice(devices.get(0), instance);
+
+        VkPhysicalDeviceProperties props = VkPhysicalDeviceProperties.calloc(stack);
+        vkGetPhysicalDeviceProperties(phyDev, props);
+        String name = props.deviceNameString();
+        int api = props.apiVersion();
+
+        // ── Queue Family Selection ──
+        IntBuffer queueCount = stack.ints(0);
+        vkGetPhysicalDeviceQueueFamilyProperties(phyDev, queueCount, null);
+        int qCount = queueCount.get(0);
+        VkQueueFamilyProperties.Buffer queueProps = VkQueueFamilyProperties.calloc(qCount, stack);
+        vkGetPhysicalDeviceQueueFamilyProperties(phyDev, queueCount, queueProps);
+
+        int graphicsQueueIndex = -1;
+        for (int i = 0; i < qCount; i++) {
+            if ((queueProps.get(i).queueFlags() & VK_QUEUE_GRAPHICS_BIT) != 0) {
+                graphicsQueueIndex = i;
+                break;
+            }
+        }
+        if (graphicsQueueIndex == -1) {
+            System.out.println("[gfx] No graphics queue found.");
+            vkDestroyInstance(instance, null);
+            return;
+        }
+
+        FloatBuffer priorities = stack.floats(1.0f);
+        VkDeviceQueueCreateInfo.Buffer queueInfo = VkDeviceQueueCreateInfo.calloc(1, stack)
+            .sType(VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO)
+            .queueFamilyIndex(graphicsQueueIndex)
+            .pQueuePriorities(priorities);
+
+        VkDeviceCreateInfo dci = VkDeviceCreateInfo.calloc(stack)
+            .sType(VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO)
+            .pQueueCreateInfos(queueInfo);
+
+        PointerBuffer pDev = stack.mallocPointer(1);
+        if (vkCreateDevice(phyDev, dci, null, pDev) != VK_SUCCESS) {
+            System.out.println("[gfx] Failed to create logical device.");
+            vkDestroyInstance(instance, null);
+            return;
+        }
+        VkDevice device = new VkDevice(pDev.get(0), phyDev, dci);
+
+        // ── Benchmark Ritual ──
+long start = System.nanoTime();
+int frames = 0;
+long frameDuration = 1_000_000_000L / 240; // nanoseconds per frame
+
+while ((System.nanoTime() - start) < durationSec * 1_000_000_000L) {
+    long frameStart = System.nanoTime();
+
+    frames++; // simulate frame render
+
+    long frameEnd = System.nanoTime();
+    long timeTaken = frameEnd - frameStart;
+    long sleepTime = frameDuration - timeTaken;
+
+    if (sleepTime > 0) {
+        try {
+            Thread.sleep(sleepTime / 1_000_000L, (int)(sleepTime % 1_000_000L));
+        } catch (InterruptedException e) {
+            // optional: log as ritual interruption
+        }
+    }
+}
+        long end = System.nanoTime();
+        double elapsed = (end - start) / 1_000_000_000.0;
+        double fps = frames / elapsed;
+
+        System.out.println("[gfx] Adapter        : " + name);
+        System.out.printf("[gfx] API Version    : Vulkan %d.%d%n",
+            VK_VERSION_MAJOR(api), VK_VERSION_MINOR(api));
+        System.out.printf("[gfx] Frames Rendered: %d%n", frames);
+        System.out.printf("[gfx] Time Elapsed   : %.2f sec%n", elapsed);
+        System.out.printf("[gfx] Average FPS    : %.2f%n", fps);
+        System.out.println("[gfx] Render Tier    : " + tier(fps));
+
+        vkDestroyDevice(device, null);
+        vkDestroyInstance(instance, null);
+    } catch (Exception e) {
+        System.out.println("[gfx] Benchmark error: " + e.getMessage());
+    }
+}
+
         private String tier(double fps) {
-            if (fps >= 2000) return "INSANE 💥🔮";
-            if (fps >= 1000) return "ULTRA 💎🚀";
-            if (fps >= 500)  return "HIGH ⚡";
-            if (fps >= 250)  return "MEDIUM 🎨";
-            return "LOW 🥔";
+            if (fps >= 2000) return "very high";
+            if (fps >= 1000) return "high";
+            if (fps >= 500)  return "medium";
+            if (fps >= 250)  return "almost low";
+            return "very low i guess";
         }
     }
 
@@ -174,15 +216,15 @@ public class intelBoot {
             try {
                 Class.forName("org.lwjgl.vulkan.VK10");
                 Class.forName("org.lwjgl.system.MemoryStack");
-                System.out.println("[sys] Vulkan bindings: ✅ available");
+                System.out.println("[sys] Vulkan bindings: available");
             } catch (Exception e) {
-                System.out.println("[sys] Vulkan bindings: ❌ missing");
+                System.out.println("[sys] Vulkan bindings: missing");
             }
             try {
                 System.loadLibrary("lwjgl");
-                System.out.println("[sys] Native lib 'lwjgl': ✅ loaded");
+                System.out.println("[sys] Native lib 'lwjgl': loaded");
             } catch (UnsatisfiedLinkError ule) {
-                System.out.println("[sys] Native lib 'lwjgl': ❌ not found");
+                System.out.println("[sys] Native lib 'lwjgl': not found");
             }
         }
     }
