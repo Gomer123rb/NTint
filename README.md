@@ -8,6 +8,8 @@ News:
 
 9/11/25: well, might take a break. it is the tower day, but why not get some fun?
 
+12/7/25: WOW i came back again and finnaly made version 17!!! 
+
 How to use:
 
 First, go to the folder "NTint", then "intelTNI" to understand how to use this, then come back when you are done. Assuming you are (now), to use intelPXI, go to the folder intelPXI and drag the "he_2" folder to your documents. Then open MounterApplication.exe, and you are done. For the best experience, please have an Intel Iris Xe Graphics Card. Or you can do whatever, I guess
