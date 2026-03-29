@@ -1,3 +1,0 @@
-2017-03-21  Tamar Christina <tamar@zhox.com>
-
-	* ntdll.def (atan, cos, fabs, floor): Mark as DATA.

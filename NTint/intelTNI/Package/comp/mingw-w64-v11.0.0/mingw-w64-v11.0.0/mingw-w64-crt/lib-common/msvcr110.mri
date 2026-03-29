@@ -1,5 +1,0 @@
-CREATE libmsvcr110.a
-ADDLIB libmsvcr110_def.a
-ADDLIB libmsvcrt_common.a
-SAVE
-END

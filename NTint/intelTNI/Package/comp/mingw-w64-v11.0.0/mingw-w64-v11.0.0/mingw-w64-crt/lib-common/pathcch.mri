@@ -1,4 +1,0 @@
-CREATE libpathcch.a
-ADDLIB libapi-ms-win-core-path-l1-1-0.a
-SAVE
-END
