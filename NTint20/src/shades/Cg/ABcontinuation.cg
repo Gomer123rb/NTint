@@ -1,0 +1,27 @@
+//ABcontinuation.cg
+
+static const float3 perfectblue = float3(24.0, 62.2, 100.0);
+static const float4 perfectblue4 = float4(perfectblue, 1.0);
+
+struct C2E1v_Output {
+    float4 position : POSITION;
+    float4 color    : COLOR;
+    float2 uv       : TEXCOORD0;
+    float3 pb       : TEXCOORD1;
+    float4 pb4      : TEXCOORD2;
+};
+
+C2E1v_Output main( float4 inPos : POSITION,
+                   float4 inColor : COLOR,
+                   float2 inUV : TEXCOORD0 )
+{
+    C2E1v_Output output;
+    
+    output.position = inPos;
+    output.color    = inColor;
+    output.uv       = inUV;
+    output.pb  = perfectblue;
+    output.pb4 = perfectblue4;
+
+    return output;
+}

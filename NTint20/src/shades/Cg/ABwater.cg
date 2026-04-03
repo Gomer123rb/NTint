@@ -1,0 +1,40 @@
+// ABwater.cg
+
+static const float3 darkblue   = float3(0.0, 0.0, 0.545);
+static const float4 darkblue4  = float4(darkblue, 1.0);
+static const float3 lightBlue  = float3(0.678, 0.847, 0.902);
+static const float4 lightBlue4 = float4(lightBlue, 1.0);
+static const float3 shadowBlue = float3(66.0, 97.0, 135.8);
+static const float4 shadowBlue4 = float4(shadowBlue, 1.0);
+
+struct C2E1v_Output {
+    float4 position : POSITION;
+    float4 color    : COLOR;
+    float2 uv       : TEXCOORD0;
+    float3 lb       : TEXCOORD1;
+    float4 lb4      : TEXCOORD2;
+    float3 db       : TEXCOORD3;
+    float4 db4      : TEXCOORD4;
+    float3 sb       : TEXCOORD5;
+    float4 sb4      : TEXCOORD6;
+};
+
+C2E1v_Output main( float4 inPos : POSITION,
+                   float4 inColor : COLOR,
+                   float2 inUV : TEXCOORD0 )
+{
+    C2E1v_Output output;
+
+    output.position = inPos;
+    output.color    = inColor;
+    output.uv       = inUV;
+
+    output.lb  = lightBlue;
+    output.lb4 = lightBlue4;
+    output.db  = darkblue;
+    output.db4 = darkblue4;
+    output.sb  = shadowBlue;
+    output.sb4 = shadowBlue4;
+
+    return output;
+}
