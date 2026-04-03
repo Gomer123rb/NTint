@@ -192,17 +192,17 @@ void WCgxR() {
 }
 
 __declspec(dllexport)
-void WGetLightToDynamic(float nearbyviewoflight, float* x, float* y, float* z) {
+void WDGetLightToDynamic(float nearbyviewoflight, float* x, float* y, float* z) {
     DirectMod::DGetLightToDynamic(nearbyviewoflight, x, y, z);
 }
 
 __declspec(dllexport)
-void WGetDynamicUV(float time, float* u, float* v) {
+void WDGetDynamicUV(float time, float* u, float* v) {
     DirectMod::DGetDynamicUV(time, u, v);
 }
 
 __declspec(dllexport)
-void WWriteDynamictoColor(float time, float* r, float* g, float* b) {
+void WDWriteDynamictoColor(float time, float* r, float* g, float* b) {
     DirectMod::DWriteDynamictoColor(time, r, g, b);
 }
 
